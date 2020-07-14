@@ -71,7 +71,7 @@ function initUpdater (opts) {
   })
 
   if (opts.notifyUser) {
-    autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName, releaseDate, updateURL) => {
+    autoUpdater.on('update-downloaded', async (event, releaseNotes, releaseName, releaseDate, updateURL) => {
       log('update-downloaded', arguments)
 
       const dialogOpts = {
@@ -82,9 +82,8 @@ function initUpdater (opts) {
         detail: 'A new version has been downloaded. Restart the application to apply the updates.'
       }
 
-      dialog.showMessageBox(dialogOpts, (response) => {
-        if (response === 0) autoUpdater.quitAndInstall()
-      })
+      const response = await dialog.showMessageBox(dialogOpts);
+      if (response === 0) autoUpdater.quitAndInstall()
     })
   }
 
